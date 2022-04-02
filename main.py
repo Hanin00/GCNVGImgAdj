@@ -6,9 +6,6 @@ import numpy as np
 '''
     adj = cluster 값이 동일한 img인 경우 인접
     featurematrix : 각 이미지 별
-
-
-
 '''
 
 
@@ -24,12 +21,6 @@ if __name__ == '__main__':
     testFile = open('freObj.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
     readFile = testFile.readline()
     label = (readFile[1:-1].replace("'",'')).split(',')
-
-
-
-
-
-
 
 
 

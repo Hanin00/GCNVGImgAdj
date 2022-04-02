@@ -1,4 +1,3 @@
-
 import sys
 import csv
 import util as ut
@@ -6,13 +5,6 @@ import YEmbedding as yed
 import numpy as np
 import pandas as pd
 import json
-
-
-
-
-
-
-
 
 
 
@@ -43,13 +35,39 @@ import json
 # j = label.tolist()
 # print(type(j))
 # print(j)
-#
 # list_a = list(map(str, j))
 #
 '''txt 로 저장'''
 # with open('cluster.txt', 'w') as file:
 #    file.writelines(','.join(list_a))
 #
+# 
+''' 1000개의 이미지의 최빈 objName 100개'''
+# with open('./data/scene_graphs.json') as file:  # open json file
+#     data = json.load(file)
+#     object = []
+#     for i in range(1000):
+#         objects = data[i]["objects"]
+#         for j in range(len(objects)):  # 이미지의 object 개수만큼 반복
+#             object.append(objects[j]['names'])
+#     object = sum(object, [])
+#     count_items = Counter(object)
+#     frqHundred = count_items.most_common(100)
+#     adjColumn = []
+#     for i in range(len(frqHundred)):
+#         adjColumn.append(frqHundred[i][0])
+# 
+#     with open('freObj.txt', 'w') as file:
+#        file.writelines(','.join(adjColumn))
+# 
+# testFile = open('freObj.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
+# readFile = testFile.readline()
+# list = (readFile[1:-1].replace("'",'')).split(',')
+# 
+# print(len(list))
+# print(list[0])
+
+
 
 
 '''txt 불러오기'''
