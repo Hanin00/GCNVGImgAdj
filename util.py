@@ -25,21 +25,24 @@ def prequency_feature(startId, endId):
                 object.append(objects[j]['names'])
         object = sum(object, [])
         count_items = Counter(object)
-        frqHundred = count_items.most_common(n=1000)
+        frqHundred = count_items.most_common(100)
         adjColumn = []
         for i in range(len(frqHundred)):
-            adjColumn.append(frqHundred[i])
-            return adjColumn
+            adjColumn.append(frqHundred[i][0])
+
+        return adjColumn
+
+
 
 '''adjMatrix 생성
 list = imgId에 대한 cluster 리스트
 클러스터링 값이 같으면 += 1로 인접을 표현하고 자기 자신에 대해서도 1값을 추가함
 '''
-def create_adjMatrix(list):
-    adjM = np.zeros((len(list), len(list)))
-    for i in range(len(list)) :
-        for j in range(len(list)) :
-            if list[i] == list[j] :
+def create_adjMatrix(clusterList):
+    adjM = np.zeros((len(clusterList), len(clusterList)))
+    for i in range(len(clusterList)) :
+        for j in range(len(clusterList)) :
+            if clusterList[i] == clusterList[j] :
                 adjM[i][j] += 1
             if i==j :
                 adjM[i][j] += 1
@@ -48,15 +51,17 @@ def create_adjMatrix(list):
 ''' imageFeature 생성(이미지 하나에 대한) '''
 def featuremap(startId, endId, freqeuncyObjectList ) :
     featureMatrix=[]
+    np.set_printoptions(threshold=sys.maxsize)
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
         object = []
         for i in range(endId-startId): # 이미지 1000개에 대한 각각의 objectNamesList 생성
             objects = data[i]["objects"]
             for j in range(len(objects)):  # 이미지의 object 개수만큼 반복
-                object.append(objects[j]['names'])
-            object= sum(object, [])   # 이미지 하나에 대한 objList
+                object.append(objects[j]['names'])   # 이미지 하나에 대한 objList
 
+            object = sum(object, [])
+            count_items = Counter(object)
             row = []
             # 이미지 하나의 obj랑 최빈 obj 랑 일치하는 게 있으면 1로 표시해서 특징 추출
             for j in range(len(object)) :
