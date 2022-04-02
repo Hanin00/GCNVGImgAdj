@@ -17,7 +17,7 @@ featureMatrix = []
 with open('./data/scene_graphs.json') as file:  # open json file
     data = json.load(file)
     object = []
-    for i in range(10):  # 이미지 1000개에 대한 각각의 objectNamesList 생성
+    for i in range(1000):  # 이미지 1000개에 대한 각각의 objectNamesList 생성
         objects = data[i]["objects"]
         for j in range(len(objects)):  # 이미지의 object 개수만큼 반복
             object.append(objects[j]['names'])  # 이미지 하나에 대한 objList
@@ -39,7 +39,4 @@ with open('./data/scene_graphs.json') as file:  # open json file
 
         featureMatrix.append((row))
 
-
-print(len(featureMatrix[0]))
-print(len(featureMatrix))
-print(featureMatrix) #10x100 나오면 됨
+featureMatrix =  np.array(featureMatrix)

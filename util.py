@@ -75,8 +75,9 @@ def featuremap(startId, endId, freObjList ) :
                         row[w] = 1
 
             featureMatrix.append((row))
+    featureMatrix=np.array(featureMatrix)
 
-        return featureMatrix
+    return featureMatrix
 
 
 
