@@ -61,7 +61,6 @@ def featuremap(startId, endId, freqeuncyObjectList ) :
                 object.append(objects[j]['names'])   # 이미지 하나에 대한 objList
 
             object = sum(object, [])
-            count_items = Counter(object)
             row = []
             # 이미지 하나의 obj랑 최빈 obj 랑 일치하는 게 있으면 1로 표시해서 특징 추출
             for j in range(len(object)) :
