@@ -1,8 +1,14 @@
 
+a = ['pants']
+j = 'pants'
 
-a = [[1,2],[1,2],[1,2],[1,2],]
+list = [0 for i in range(12)]
 
+print(list)
 
-print(','.join(str(e[1]) for e in a))
+k = ''.join(a[0])
+print(a)
+print(k)
+print(j)
 
-#print 결과 : 2,2,2,2
+print(k==j)

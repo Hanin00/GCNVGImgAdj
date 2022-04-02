@@ -49,27 +49,32 @@ def create_adjMatrix(clusterList):
     return adjM
 
 ''' imageFeature 생성(이미지 하나에 대한) '''
-def featuremap(startId, endId, freqeuncyObjectList ) :
+def featuremap(startId, endId, freObjList ) :
     featureMatrix=[]
-    np.set_printoptions(threshold=sys.maxsize)
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
         object = []
-        for i in range(endId-startId): # 이미지 1000개에 대한 각각의 objectNamesList 생성
+        for i in range(endId-startId):  # 이미지 1000개에 대한 각각의 objectNamesList 생성
             objects = data[i]["objects"]
             for j in range(len(objects)):  # 이미지의 object 개수만큼 반복
-                object.append(objects[j]['names'])   # 이미지 하나에 대한 objList
+                object.append(objects[j]['names'])  # 이미지 하나에 대한 objList
 
-            object = sum(object, [])
-            row = []
+            # object = sum(object, [])
+
             # 이미지 하나의 obj랑 최빈 obj 랑 일치하는 게 있으면 1로 표시해서 특징 추출
-            for j in range(len(object)) :
-                if object[j] in freqeuncyObjectList :
-                    k = freqeuncyObjectList.index(object[j])
-                    row.append(1)
-                else :
-                    row.append(0)
-            featureMatrix.append(row)
+
+            row = [0 for i in range(len(freObjList))]
+            l = 0
+            for k in range(len(freObjList)):
+                for j in range(len(objects)):
+                    n = ''.join(object[j])
+                    m = freObjList[k]
+
+                    if n in freObjList:
+                        w = freObjList.index(n)
+                        row[w] = 1
+
+            featureMatrix.append((row))
 
         return featureMatrix
 
