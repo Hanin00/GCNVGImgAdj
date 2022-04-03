@@ -1,6 +1,12 @@
 import util as ut
 import YEmbedding as yed
 import numpy as np
+from torch import nn, optim
+import util
+import util2
+import model
+import train
+
 
 
 '''
@@ -21,6 +27,14 @@ if __name__ == '__main__':
     testFile = open('./data/freObj.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
     readFile = testFile.readline()
     label = (readFile[1:-1].replace("'",'')).split(',')
+
+    #train, test, val 나누기
+
+    #모델 생성
+    #train
+    #test
+
+
 
 
 

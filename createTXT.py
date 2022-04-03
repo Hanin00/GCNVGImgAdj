@@ -123,3 +123,5 @@ import json
 # featureMatrix =  np.array(featureMatrix)
 # np.save('idFreFeature.npy',featureMatrix)
 # featuremap = np.load('idFreFeature.npy')
+
+
