@@ -16,11 +16,23 @@ import numpy as np
 '''
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    featuremap = np.load('idFreFeature.npy')
-    idAdj = np.load('idAdj.npy')
-    testFile = open('freObj.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
+    featuremap = np.load('./data/idFreFeature.npy')
+    idAdj = np.load('./data/idAdj.npy')
+    testFile = open('./data/freObj.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
     readFile = testFile.readline()
     label = (readFile[1:-1].replace("'",'')).split(',')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
