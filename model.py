@@ -16,18 +16,17 @@ class GCN_layer(nn.Module):
         self.A = A
         self.fc = nn.Linear(in_features, out_features)
 
+#X : 초기 랜덤값 -> 학습 하면서 변경
     def forward(self, X): # A와 X의 곱으로 얻어진 매트릭스를 row 단위로 fully connected layer로 넘김
         #A : 모든 논문의 그래프 정보가 담긴 매트릭스  1000x1000
         #X : 각 논문의 feature 정보가 담긴 매트릭스  1000x100
+        #print(X)
+
         return self.fc(torch.spmm(self.A, X))  # 이웃 정보 종합
 '''
 torch.tensor : 단일 데이터 유형의 요소를 포함하느 ㄴ다차원 배열
 
-
-
 '''
-
-
 class GCN(nn.Module):
     def __init__(self, num_feature, num_class, A):
         super(GCN, self).__init__()

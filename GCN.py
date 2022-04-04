@@ -38,7 +38,7 @@ def train(model, Loss, optimizer, num_epochs):
             model.eval()
             output = model(features)
             val_loss = criterion(output[idx_val], labels[idx_val])
-            test_loss = criterion(output[idx_test], labels[idx_test])
+            test_loss = criterion(output[idx_test], labels[idx_test]) #test loss 값.
 
             # val_acc = ut2.accuracy(output[idx_val], labels[idx_val])
             # test_acc = ut2.accuracy(output[idx_test], labels[idx_test])
@@ -110,6 +110,9 @@ def testBatch():
 
 
 features = np.load('./data/idFreFeature.npy')
+
+
+
 A = torch.Tensor(np.load('./data/idAdj.npy'))
 testFile = open('./data/cluster.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
 readFile = testFile.readline()
@@ -131,6 +134,9 @@ idx_test = torch.LongTensor(idx_test)
 
 # GCN 학습 돌려서 epoch에 따른 Loss 확인
 model = model.GCN(features.size(1), labels.size(0), A)
+print(features.size(1))
+print(labels.size(0))
+
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.1, weight_decay=0.0001)
 

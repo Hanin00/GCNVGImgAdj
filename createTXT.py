@@ -5,6 +5,7 @@ import YEmbedding as yed
 import numpy as np
 import pandas as pd
 import json
+import sys
 
 # startId = 1
 # endId = 10
@@ -134,7 +135,7 @@ with open('./data/scene_graphs.json') as file:  # open json file
     data = json.load(file)
     # imgId의 relationship에 따른 objId, subjId list
     # i는 image id
-    #imageDescriptions = data[imageId-1]["relationships"]
+    # imageDescriptions = data[imageId-1]["relationships"]
     imageDescriptions = data[0]["relationships"]
     objectId = []
     subjectId = []
@@ -157,47 +158,54 @@ with open('./data/objects.json') as file:  # open json file
     # 한 이미지 내에서 사용되는 obj의 Id 와 이름 dict;  여러 관계 간 동일 obj가 사용되는 경우가 있기 때문
     # subject의 id값을 넣었을 때 name이 제대로 나오는 지 확인 :
     objects = data[0]["objects"]
-    allObjNameDict = {}
+    allObjName = []
     for i in range(len(objects)):
-        #allObjNameDict[objects[i]['object_id']] = objects[i]['names']
-        allObjNameDict[objects[i]['names'][0]] = objects[i]['object_id']
-        if not objects[i]['merged_object_ids'] != [] :  #id 5090처럼 merged_object_id에 대해서도 추가해주면 좋을 듯
+        allObjName.append(([objects[i]['names'][0]], objects[i]['object_id']))
+        if not objects[i]['merged_object_ids'] != []:  # id 5090처럼 merged_object_id에 대해서도 추가해주면 좋을 듯
             for i in range(len(objects[i]['merged_object_ids'])):
                 print(objects[i]['merged_object_ids'][i])
-                allObjNameDict[objects[i]['merged_object_ids'][i]]= objects[i]['names']
-    print(allObjNameDict)
+                allObjName.append(([objects[i]['merged_object_ids'][0]], objects[i]['object_id']))
 
+    print(allObjName)
+    print(type(allObjName[0][0]))
 
 objIdName = []
 subIdName = []
 for i in range(len(subjectId)):
     objectName = ''
     subjectName = ''
+    for mTuple in allObjName:
+        if objectId[i] in mTuple:
+            objectName = str(mTuple[0][0])
+        if subjectId[i] in mTuple :
+            subjectName = str(mTuple[0][0])
+        if (objectName != '') & (subjectName != '') :
+            objIdName.append(objectName)
+            subIdName.append(subjectName)
+
+'''if objectName in allObjNameDict :
     objectName = allObjNameDict[objectId[i]]
+if subjectName in allObjNameDict :
     subjectName = allObjNameDict[subjectId[i]]
+if (objectName!='')&(subjectName!=''):
     objIdName.append(objectName)
-    subIdName.append(subjectName)
-
-
-    '''if objectName in allObjNameDict :
-        objectName = allObjNameDict[objectId[i]]
-    if subjectName in allObjNameDict :
-        subjectName = allObjNameDict[subjectId[i]]
-    if (objectName!='')&(subjectName!=''):
-        objIdName.append(objectName)
-        subIdName.append(subjectName)'''
+    subIdName.append(subjectName)'''
 
 # 위에서 얻은 obj,subName List로 adjColumn인 freObj에서 위치를 찾음
 for i in range(len(objIdName)):
     adjObj = ''
     adjSub = ''
     if objIdName[i] in adjColumn:
+        print(objIdName[i])
         adjObj = adjColumn.index(objIdName[i])
         adjM[adjObj][adjObj] += 1
     if subIdName[i] in adjColumn:
         adjSub = adjColumn.index(subIdName[i])
+
         adjM[adjSub][adjSub] += 1
+        print(subIdName[i])
     if (adjObj != '') & (adjSub != ''):
         adjM[adjObj][adjSub] += 1
 
+#np.set_printoptions(sys.maxsize)
 print(adjM)
