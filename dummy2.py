@@ -1,9 +1,15 @@
+# https://docs.microsoft.com/ko-kr/windows/ai/windows-ml/tutorials/pytorch-train-model
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torch import nn
-import util
-from dgl.nn import GraphConv
+import numpy as np
+import util2 as ut2
+
+# Function to save the model
+def saveModel():
+    path = "./GCNModel.pth"
+    torch.save(model.state_dict(), path)
 
 
 
