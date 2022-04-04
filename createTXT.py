@@ -6,8 +6,6 @@ import numpy as np
 import pandas as pd
 import json
 
-
-
 # startId = 1
 # endId = 10
 # xlxspath = './data/image_regions.xlsx'
@@ -22,9 +20,8 @@ import json
 # # featuremap =ut.featuremap(startId,endId,freObj)
 
 
-
-#listitem = label[1]
-#output_array = np.array(listitem)
+# listitem = label[1]
+# output_array = np.array(listitem)
 
 '''label txt 저장'''
 # xlxspath = './data/image_regions.xlsx'
@@ -68,15 +65,14 @@ import json
 # print(list[0])
 
 
-
-
 '''txt 불러오기'''
 # testFile = open('freObj.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
 # readFile = testFile.readline()
 # list = (readFile[1:-1].replace("'",'')).split(',')
 
+
 '''id x id 동일 클러스터 Adj 저장'''
-# #adjM = np.zeros((len(imgCnt), len(imgCnt))) #1000x1000(id 개수로 해야함. 근데 테스트라 10개만)
+# adjM = np.zeros((len(imgCnt), len(imgCnt))) #1000x1000(id 개수로 해야함. 근데 테스트라 10개만)
 # adjM = np.zeros((1000, 1000)) #1000x1000(id 개수로 해야함. 근데 테스트라 10개만)
 # for i in range(len(adjM[0])):
 #     for j in range(len(adjM[0])):
@@ -85,17 +81,18 @@ import json
 #         if i == j:
 #             adjM[i][j] += 1
 # np.save('idAdj.npy',adjM)
-#idAdj = np.load('idAdj.npy')
+# idAdj = np.load('idAdj.npy')
+#
+
 
 #
-# '''img 당 freObj 있/없 featuremap'''
-# testFile = open('freObj.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
+# '''img 당 freObj 있/없 featuremap-image 1'''
+# testFile = open('./data/freObj.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
 # readFile = testFile.readline()
 # list = (readFile[1:-1].replace("'",'')).replace(' ','').split(',')
 #
 # freObj = list[:100]
-#
-# featureMatrix = []
+# adjM = np.zeros((1000, 1000))
 # with open('./data/scene_graphs.json') as file:  # open json file
 #     data = json.load(file)
 #     object = []
@@ -120,8 +117,87 @@ import json
 #                     row[w] = 1
 #
 #         featureMatrix.append((row))
-# featureMatrix =  np.array(featureMatrix)
-# np.save('idFreFeature.npy',featureMatrix)
-# featuremap = np.load('idFreFeature.npy')
 
 
+'''img 당 freObj 있/없 featuremap 이미지 하나 당'''
+testFile = open('./data/freObj.txt', 'r')  # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
+readFile = testFile.readline()
+list = (readFile[1:-1].replace("'", '')).replace(' ', '').split(',')
+
+freObj = list[:100]
+adjColumn = freObj
+adjM = np.zeros((len(adjColumn), len(adjColumn)))
+# 이미지 내 object, subject 끼리 list 만듦. 한 relationship에 objId, subId 하나씩 있음. Name은 X
+imageId = 1
+
+with open('./data/scene_graphs.json') as file:  # open json file
+    data = json.load(file)
+    # imgId의 relationship에 따른 objId, subjId list
+    # i는 image id
+    #imageDescriptions = data[imageId-1]["relationships"]
+    imageDescriptions = data[0]["relationships"]
+    objectId = []
+    subjectId = []
+
+    for j in range(len(imageDescriptions)):  # 이미지의 object 개수만큼 반복
+        objectId.append(imageDescriptions[j]['object_id'])
+        subjectId.append(imageDescriptions[j]['subject_id'])
+    # object = sum(object, [])
+
+    # 이미지 하나의 obj랑 최빈 obj 랑 일치하는 게 있으면 1로 표시해서 특징 추출
+# obj에서 각 id로 objName, subName 찾아서 리스트로 저장
+with open('./data/objects.json') as file:  # open json file
+    data = json.load(file)
+    # 각 이미지 별로 obj, relationship 가져와서 인접 행렬을 만듦
+    # 해당 모듈은 이미지 하나에 대한 인접행렬 만듦
+    # imgId의 relationship에 따른 objId, subjId list
+    # i는 image id
+    # objectId = data[imgId][""]
+
+    # 한 이미지 내에서 사용되는 obj의 Id 와 이름 dict;  여러 관계 간 동일 obj가 사용되는 경우가 있기 때문
+    # subject의 id값을 넣었을 때 name이 제대로 나오는 지 확인 :
+    objects = data[0]["objects"]
+    allObjNameDict = {}
+    for i in range(len(objects)):
+        #allObjNameDict[objects[i]['object_id']] = objects[i]['names']
+        allObjNameDict[objects[i]['names'][0]] = objects[i]['object_id']
+        if not objects[i]['merged_object_ids'] != [] :  #id 5090처럼 merged_object_id에 대해서도 추가해주면 좋을 듯
+            for i in range(len(objects[i]['merged_object_ids'])):
+                print(objects[i]['merged_object_ids'][i])
+                allObjNameDict[objects[i]['merged_object_ids'][i]]= objects[i]['names']
+    print(allObjNameDict)
+
+
+objIdName = []
+subIdName = []
+for i in range(len(subjectId)):
+    objectName = ''
+    subjectName = ''
+    objectName = allObjNameDict[objectId[i]]
+    subjectName = allObjNameDict[subjectId[i]]
+    objIdName.append(objectName)
+    subIdName.append(subjectName)
+
+
+    '''if objectName in allObjNameDict :
+        objectName = allObjNameDict[objectId[i]]
+    if subjectName in allObjNameDict :
+        subjectName = allObjNameDict[subjectId[i]]
+    if (objectName!='')&(subjectName!=''):
+        objIdName.append(objectName)
+        subIdName.append(subjectName)'''
+
+# 위에서 얻은 obj,subName List로 adjColumn인 freObj에서 위치를 찾음
+for i in range(len(objIdName)):
+    adjObj = ''
+    adjSub = ''
+    if objIdName[i] in adjColumn:
+        adjObj = adjColumn.index(objIdName[i])
+        adjM[adjObj][adjObj] += 1
+    if subIdName[i] in adjColumn:
+        adjSub = adjColumn.index(subIdName[i])
+        adjM[adjSub][adjSub] += 1
+    if (adjObj != '') & (adjSub != ''):
+        adjM[adjObj][adjSub] += 1
+
+print(adjM)

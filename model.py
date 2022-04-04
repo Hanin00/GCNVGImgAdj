@@ -20,6 +20,12 @@ class GCN_layer(nn.Module):
         #A : 모든 논문의 그래프 정보가 담긴 매트릭스  1000x1000
         #X : 각 논문의 feature 정보가 담긴 매트릭스  1000x100
         return self.fc(torch.spmm(self.A, X))  # 이웃 정보 종합
+'''
+torch.tensor : 단일 데이터 유형의 요소를 포함하느 ㄴ다차원 배열
+
+
+
+'''
 
 
 class GCN(nn.Module):

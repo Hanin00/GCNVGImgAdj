@@ -18,15 +18,15 @@ def train(model, Loss, optimizer, num_epochs):
     early_stop, early_stop_max = 0., 10.
     for epoch in range(num_epochs):
         # Forward Pass
-        model.train()
-        output = model(features)
+        model.train() #모델을 학습 모드로 변환
+        output = model(features)  # data를 모델에 넣어서 가설(hypothesis) 획득
         #model, target
       #  train_loss = criterion(output[idx_train],labels[idx_train])
         train_loss = Loss(output[idx_train],labels[idx_train])
 
         # Backward and optimize
-        train_loss.backward()
-        optimizer.step()
+        train_loss.backward() # loss를 역전파 알고리즘으로 계산
+        optimizer.step() # 계산한 기울기를 앞서 정의한 알고리즘에 맞춰 가중치를 수정
 
         train_loss_arr.append(train_loss.data)
 
@@ -107,15 +107,18 @@ def testBatch():
 
 features = np.load('./data/idFreFeature.npy')
 A = torch.Tensor(np.load('./data/idAdj.npy'))
-testFile = open('./data/cluster.txt','r') # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
+testFile = open('./data/cluster.txt','r')
 readFile = testFile.readline()
 label = readFile[1:].replace("'",'').replace(' ','').split(',')
 features = torch.Tensor(features)
 labels = []
-for i in range(1000)  :
+for i in range(1000) :
     labels.append(int(label[i]))
 labels = torch.Tensor(labels)
 labels = labels.long()
+
+
+#train/val/text
 idx_train = range(0,400)
 idx_val =(400,700)
 idx_test = (700,999)
