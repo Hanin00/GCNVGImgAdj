@@ -26,7 +26,7 @@ from scipy.sparse import diags
 from scipy.sparse import eye
 from pathlib import Path
 from functools import partial
-
+import sys
 
 '''
 GNN Node Classification
@@ -165,6 +165,15 @@ def step():
     model.train()  #model 학습모드로
     optimizer.zero_grad()
     output = model(features, adj)  #model에 값 넣음
+    print(output.shape)
+    print(idx_train.shape)
+    print(labels.shape)
+
+    print(output[idx_train])
+    print(output[idx_train].shape)
+    print(labels[idx_train])
+    print(labels[idx_train].shape)
+    sys.exit()
     loss = F.nll_loss(output[idx_train], labels[idx_train]) #loss 함수
     acc = accuracy(output[idx_train], labels[idx_train]) #accuracy 파악
     loss.backward()
