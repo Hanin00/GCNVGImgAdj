@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 data/scene_graphs.json
 data/objects.json
+data/dataset.pickle

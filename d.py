@@ -144,6 +144,8 @@ class GCN(nn.Module):
 
 n_labels = labels.max().item() + 1  # 15
 n_features = features.shape[1]  # 100
+print(features[0])
+print(len(features[0]))
 
 # seed 고정
 torch.manual_seed(34)

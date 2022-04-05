@@ -41,8 +41,6 @@ def load_data():
     adj = normalize(adj + sp.eye(adj.shape[0]))
 
 
-
-
     # 학습/검증/시험셋
     idx_train = range(180)
     idx_val = range(200, 500)
